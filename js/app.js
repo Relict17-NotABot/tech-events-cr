@@ -130,41 +130,104 @@ const eventos = [
     estado: '',
   },
 ];
-/*Definir disponibilidad */
+
+/**Variables */
+
+let ContadorDisponibles = 0;
+let ContadorLlenos = 0;
+let ContadorActivos = 0;
+let ContadorInactivos = 0;
+let eventoMax = eventos[1];
+
+
+
+
+console.log('========================================================================')
+console.log('-------------------- REPORTE DE EVENTOS TECH-EVENTS --------------------')
+console.log('========================================================================')
+console.log(`Total de eventos registrados : ${eventos.length}`)
+console.log('========================================================================')
+console.log('------------------------- DETALLE DE EVENTOS ---------------------------')
 for (const evento of eventos) {
+
+  /*Definir evento con mas cupos */
+  
+  for(const eventoMasCupos of eventos){
+    if(eventoMax.cuposTotales < eventoMasCupos.cuposTotales){
+      eventoMax = eventoMasCupos;
+    }
+  }
+
+  /*definir disponibilidad*/
   const disp = evento.cuposTotales - evento.inscritos;
   if (disp > 10) {
-    evento.activo = 'Disponible';
+    evento.estado = 'Disponible';
+    ContadorDisponibles++;
   } else if (disp <= 10 && disp >= 1) {
-    evento.activo = 'Pocos Cupos';
+    evento.estado = 'Pocos Cupos';
+    ContadorDisponibles++;
   } else {
-    evento.activo = 'Evento lleno';
-  }
-}
+    evento.estado = 'Evento lleno';
+    ContadorLlenos++;
+  } 
 
-/*Definir activo */
-for (const evento of eventos) {
-}
-
-/*Mostrar eventos */
-console.log(
-  '--------------------REPORTE DE EVENTOS TECHEVENTS--------------------',
-);
-for (const evento of eventos) {
+  /*Definir activos*/ 
   resultActivo = '';
-  if ((evento.activo = true)) {
+  if (evento.activo) {
     resultActivo = 'Si';
+    ContadorActivos++;
   } else {
     resultActivo = 'No';
+    ContadorInactivos++;
   }
+
+  /*Impresion de detalle de cada evento */
   console.log(`Evento   : ${evento.nombre}`);
   console.log(`Categoría: ${evento.categoria}`);
   console.log(`Modalidad: ${evento.modalidad}`);
   console.log(`Cupos Disponibles: ${evento.cuposTotales - evento.inscritos}`);
   console.log(`Activo  : ${resultActivo}`);
-  console.log('- - - - - - - - - - - - - - - - ');
+  console.log(`Estado  : ${evento.estado}`)
+  console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
 }
-console.log('-----------------------------------------------');
+
+/**IMPRESION DE ESTADISTICAS GENERALES Y EVENTO CON MAYOR DISPONIBILIDAD */
+console.log('------------------------------------------------------------------------');
+console.log('========================================================================')
+console.log('----------------------- ESTADÍSTICAS GENERALES -------------------------')
+console.log(`Eventos con cupos disponibles  : ${ContadorDisponibles}`)
+console.log(`Eventos llenos  : ${ContadorLlenos}`)
+console.log(`Eventos activos  : ${ContadorActivos}`)
+console.log(`Eventos inactivos  : ${ContadorInactivos}`)
+console.log('========================================================================')
+console.log('------------------- EVENTO CON MAYOR DISPOBILIDAD ----------------------')
+console.log(`Nombre : ${eventoMax.nombre}`)
+console.log('========================================================================')
+
+
+/**Eventos con participacion remota y activos y con cupos disponibles */
+console.log('------------------- EVENTOS CON PARTICIPACIÓN REMOTA -------------------')
+console.log('========================================================================')
+for(const evento of eventos){
+  if(evento.modalidad === 'Híbrida' || evento.modalidad == 'Virtual'){
+    console.log(evento.nombre)
+    console.log(`Cupos disponibles : ${evento.cuposTotales-evento.inscritos}`)
+    console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
+  }
+}
+
+/**Eventos con participacion remota y activos y con cupos disponibles */
+console.log('========================================================================')
+console.log('------------------ EVENTOS ACTIVOS CON CUPOS DISPONIBLES ---------------')
+console.log('========================================================================')
+for(const evento of eventos){
+  if(evento.activo = true && (evento.cuposTotales-evento.inscritos) >= 1){
+    console.log(evento.nombre)
+    console.log(`Cupos disponibles : ${evento.cuposTotales-evento.inscritos}`)
+    console.log('- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -');
+  }
+}
+
 
 /** 
     ];
